@@ -101,20 +101,25 @@ def calculate_polynomial_division(dividend, divisor):
 
 app = tk.Tk()
 app.title("Ứng dụng Giải Tích")
-app.geometry("900x900")
+app.geometry("900x500")
+app.tk.call('tk', 'scaling', 1.5)  
+
+
 result_label = tk.Label(app, text="", wraplength=400)
-result_label.pack()
+result_label.grid(column=0, row=0, padx=10, pady=10)
+
 
 limit_button = tk.Button(app, text="Tính Giới Hạn", command=open_limit_window)
-limit_button.pack()
+limit_button.grid(column=0, row=1, padx=10, pady=10)
 
 derivative_button = tk.Button(app, text="Tính Đạo Hàm", command=open_derivative_window)
-derivative_button.pack()
+derivative_button.grid(column=0, row=2, padx=10, pady=10)
 
 integral_button = tk.Button(app, text="Tính Tích Phân", command=open_integral_window)
-integral_button.pack()
+integral_button.grid(column=0, row=3, padx=10, pady=10)
 
 division_button = tk.Button(app, text="Chia Đa Thức", command=open_polynomial_division_window)
-division_button.pack()
+division_button.grid(column=0, row=4, padx=10, pady=10)
 
 app.mainloop()
+
