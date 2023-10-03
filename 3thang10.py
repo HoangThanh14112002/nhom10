@@ -20,6 +20,11 @@ def open_limit_window():
 
     calculate_limit_button = tk.Button(limit_window, text="Tính Giới Hạn",
                                        command=lambda: calculate_limit(limit_entry.get(), limit_value_entry.get()))
+    clear_button = tk.Button(limit_window, text="Xóa", command=lambda: result_label.config(text=""))
+    clear_button.pack()
+
+    close_button = tk.Button(limit_window, text="Thoát", command=limit_window.destroy)
+    close_button.pack()
     calculate_limit_button.pack()
 
 
@@ -35,21 +40,33 @@ def open_derivative_window():
 
     calculate_derivative_button = tk.Button(derivative_window, text="Tính Đạo Hàm",
                                             command=lambda: calculate_derivative(derivative_entry.get()))
+    clear_button = tk.Button(derivative_window, text="Xóa", command=lambda: result_label.config(text=""))
+    clear_button.pack()
+
+    close_button = tk.Button(derivative_window, text="Thoát", command=derivative_window.destroy)  # Sửa đoạn này
+    close_button.pack()
+
     calculate_derivative_button.pack()
 
 
 def open_integral_window():
     integral_window = tk.Toplevel(app)
-    integral_window.title("Tính Tích Phân")
+    integral_window.title("Tính nguyên hàm")
 
-    integral_label = tk.Label(integral_window, text="Nhập biểu thức cần tính tích phân:")
+    integral_label = tk.Label(integral_window, text="Nhập biểu thức cần tính nguyên hàm:")
     integral_label.pack()
 
     integral_entry = tk.Entry(integral_window)
     integral_entry.pack()
 
-    calculate_integral_button = tk.Button(integral_window, text="Tính Tích Phân",
+    calculate_integral_button = tk.Button(integral_window, text="Tính Nguyên hàm",
                                           command=lambda: calculate_integral(integral_entry.get()))
+    clear_button = tk.Button(integral_window, text="Xóa", command=lambda: result_label.config(text=""))
+    clear_button.pack()
+
+    close_button = tk.Button(integral_window, text="Thoát", command=integral_window.destroy)  # Sửa đoạn này
+    close_button.pack()
+
     calculate_integral_button.pack()
 
 
@@ -72,54 +89,70 @@ def open_polynomial_division_window():
     calculate_polynomial_division_button = tk.Button(division_window, text="Chia Đa Thức",
                                                      command=lambda: calculate_polynomial_division(dividend_entry.get(),
                                                                                                    divisor_entry.get()))
+    clear_button = tk.Button(division_window, text="Xóa", command=lambda: result_label.config(text=""))
+    clear_button.pack()
+
+    close_button = tk.Button(division_window, text="Thoát", command=division_window.destroy)
+    close_button.pack()
     calculate_polynomial_division_button.pack()
 
 
 def calculate_limit(expression, limit_value):
+    if not expression or not limit_value:
+        result_label.config(text="Vui lòng nhập biểu thức và giá trị tiến đến trước khi tính toán.")
+        return
+
     x = Symbol('x')
     result = limit(sympify(expression), x, float(limit_value))
     result_label.config(text=f"Giới hạn của {expression} khi x tiến đến {limit_value} là: {result}")
 
 
-def calculate_derivative(expression):
+
+
+
+def calculate_derivative(expression,k):
+    if not expression or not k:
+        result_label.config(text="Vui lòng nhập biểu thức và giá trị tiến đến trước khi tính toán.")
+        return
     x = Symbol('x')
     result = diff(sympify(expression), x)
     result_label.config(text=f"Đạo hàm của {expression} là: {result}")
 
 
-def calculate_integral(expression):
+def calculate_integral(expression,l):
+    if not expression or not l:
+        result_label.config(text="Vui lòng nhập biểu thức và giá trị tiến đến trước khi tính toán.")
+        return
     x = Symbol('x')
     result = integrate(sympify(expression), x)
-    result_label.config(text=f"Tích phân của {expression} là: {result}")
+    result_label.config(text=f"Nguyên hàm của {expression} là: {result}")
 
 
 def calculate_polynomial_division(dividend, divisor):
+    if not dividend or not divisor:
+        result_label.config(text="Vui lòng nhập cả số tử và số mẫu đa thức trước khi tính toán.")
+        return
+
     x = Symbol('x')
     quotient, remainder = div(sympify(dividend), sympify(divisor))
     result_label.config(text=f"Kết quả chia đa thức {dividend} cho {divisor} là:\nKết quả: {quotient}\nDư: {remainder}")
 
-
 app = tk.Tk()
 app.title("Ứng dụng Giải Tích")
-app.geometry("900x500")
-app.tk.call('tk', 'scaling', 1.5)  
-
-
+app.geometry("900x900")
 result_label = tk.Label(app, text="", wraplength=400)
-result_label.grid(column=0, row=0, padx=10, pady=10)
-
+result_label.pack()
 
 limit_button = tk.Button(app, text="Tính Giới Hạn", command=open_limit_window)
-limit_button.grid(column=0, row=1, padx=10, pady=10)
+limit_button.pack()
 
 derivative_button = tk.Button(app, text="Tính Đạo Hàm", command=open_derivative_window)
-derivative_button.grid(column=0, row=2, padx=10, pady=10)
+derivative_button.pack()
 
-integral_button = tk.Button(app, text="Tính Tích Phân", command=open_integral_window)
-integral_button.grid(column=0, row=3, padx=10, pady=10)
+integral_button = tk.Button(app, text="Tính nguyên hàm", command=open_integral_window)
+integral_button.pack()
 
 division_button = tk.Button(app, text="Chia Đa Thức", command=open_polynomial_division_window)
-division_button.grid(column=0, row=4, padx=10, pady=10)
+division_button.pack()
 
 app.mainloop()
-
