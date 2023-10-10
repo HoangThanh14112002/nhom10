@@ -1,18 +1,12 @@
 import numpy as np
-# import tensorflow as tf
 import matplotlib.pyplot as plt
 import tensorflow.compat.v1 as tf
 import pandas as pd
-from numpy import array
+import pickle
 
 tf.disable_v2_behavior()
-# Generating random linear data
-# There will be 50 data points ranging from 0 to 50
-'''df=pd.read_csv('Student_Performance.csv',index_col=0,header = 0)
-x = array(df.iloc[:900,:5])
-y = array(df.iloc[:900,5:6])
-'''
-# Tạo tâp giá trị x và y
+
+# Tạo tập giá trị x và y
 x = np.linspace(0, 50, 50)
 y = np.linspace(0, 50, 50)
 
@@ -20,22 +14,28 @@ y = np.linspace(0, 50, 50)
 x += np.random.uniform(-4, 4, 50)
 y += np.random.uniform(-4, 4, 50)
 n = len(x)  # Số lượng dữ liệu
-# Plot of Training Data
+
+# Plot dữ liệu huấn luyện
 plt.scatter(x, y)
 plt.xlabel('x')
 plt.ylabel('y')
-plt.title("Training Data")
+plt.title("Dữ liệu Huấn luyện")
 plt.show()
+
 # Tạo model cho tập dữ liệu
 X = tf.placeholder("float")
 Y = tf.placeholder("float")
-# khởi tạo biến w và b
+
+# Khởi tạo biến w và b
 W = tf.Variable(np.random.randn(), name="W")
 b = tf.Variable(np.random.randn(), name="b")
-# thiết lập tốc độ học
+
+# Thiết lập tốc độ học
 learning_rate = 0.01
-# số vòng lặp
+
+# Số vòng lặp
 training_epochs = 100
+
 # Hàm tuyến tính
 y_pred = tf.add(tf.multiply(X, W), b)
 
@@ -47,6 +47,7 @@ optimizer = tf.train.GradientDescentOptimizer(learning_rate).minimize(cost)
 
 # Thiết lập Global Variables
 init = tf.global_variables_initializer()
+
 # Starting the Tensorflow Session
 with tf.Session() as sess:
     # Initializing the Variables
@@ -54,14 +55,13 @@ with tf.Session() as sess:
 
     # Iterating through all the epochs
     for epoch in range(training_epochs):
-
         # Feeding each data point into the optimizer using Feed Dictionary
         for (_x, _y) in zip(x, y):
             sess.run(optimizer, feed_dict={X: _x, Y: _y})
 
         # Displaying the result after every 50 epochs
         if (epoch + 1) % 50 == 0:
-            # Calculating the cost a every epoch
+            # Calculating the cost at every epoch
             c = sess.run(cost, feed_dict={X: x, Y: y})
             print("Epoch", (epoch + 1), ": cost =", c, "W =", sess.run(W), "b =", sess.run(b))
 
@@ -69,12 +69,23 @@ with tf.Session() as sess:
     training_cost = sess.run(cost, feed_dict={X: x, Y: y})
     weight = sess.run(W)
     bias = sess.run(b)
-# Calculating the predictions
-predictions = weight * x + bias
-print("Training cost =", training_cost, "Weight =", weight, "bias =", bias, '\n')
-# Plotting the Results
-plt.plot(x, y, 'ro', label='Original data')
-plt.plot(x, predictions, label='Fitted line')
-plt.title('Linear Regression Result')
+
+# Lưu mô hình đã huấn luyện bằng Pickle
+model = {'weight': weight, 'bias': bias}
+with open('linear_model.pkl', 'wb') as model_file:
+    pickle.dump(model, model_file)
+
+# Đọc mô hình từ tệp và sử dụng nó để dự đoán dữ liệu mới
+with open('linear_model.pkl', 'rb') as model_file:
+    loaded_model = pickle.load(model_file)
+
+new_x = np.array([55, 60, 65, 70])  # Dữ liệu mới
+new_predictions = loaded_model['weight'] * new_x + loaded_model['bias']
+print("Dự đoán cho dữ liệu mới:", new_predictions)
+
+# Plot kết quả
+plt.plot(x, y, 'ro', label='Dữ liệu gốc')
+plt.plot(new_x, new_predictions, 'bo', label='Dự đoán cho dữ liệu mới')
+plt.title('Kết quả Hồi quy Tuyến tính')
 plt.legend()
 plt.show()
