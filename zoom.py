@@ -44,11 +44,11 @@ def zoom_button_clicked():
     scale_factor_y = float(scale_factor_y_entry.get())
     zoom_image(scale_factor_x, scale_factor_y)
 zoom_button = ttk.Button(window, text="Zoom", command=zoom_button_clicked)
-zoom_button.place(x=10, y=10)  # Điều chỉnh vị trí (x, y) của nút "Zoom" theo ý muốn
+zoom_button.place(x=20, y=20)  # Điều chỉnh vị trí (x, y) của nút "Zoom" theo ý muốn
 
 # Nút Reset
 reset_button = ttk.Button(window, text="Reset", command=reset_image)
-reset_button.place(x=90, y=10)  # Điều chỉnh vị trí (x, y) của nút "Reset" theo ý muốn
+reset_button.place(x=100, y=20)  # Điều chỉnh vị trí (x, y) của nút "Reset" theo ý muốn
 # Hiển thị ảnh ban đầu
 photo_label = ttk.Label(window)
 display_image(original_image)
