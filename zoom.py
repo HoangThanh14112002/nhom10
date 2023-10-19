@@ -58,4 +58,14 @@ def zoom_button_clicked():
     scale_factor_y = float(scale_factor_y_entry.get())
     zoom_image(scale_factor_x, scale_factor_y)
 
+# Thêm tính năng chọn ảnh từ máy tính
+def open_file():
+    global original_image
+    file_path = tk.filedialog.askopenfilename()
+    original_image = cv2.imread(file_path)
+    display_image(original_image)
+
+open_file_button = ttk.Button(window, text="Open File", command=open_file)
+open_file_button.place(x=180, y=20)  # Điều chỉnh vị trí (x, y) của nút "Open File" theo ý muốn
+
 window.mainloop()
