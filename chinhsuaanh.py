@@ -5,6 +5,7 @@ from tkinter import filedialog
 
 # Define global variables
 img = None
+original_img = None  # This will hold the original image
 rows, cols = 0, 0
 kernel_identity = np.array([[0, 0, 0], [0, 1, 0], [0, 0, 0]])
 kernel_3x3 = np.ones((3, 3), np.float32) / 9.0
@@ -25,15 +26,34 @@ def apply_effect(x, y):
     cv2.imshow('Original', img)
 
 def open_image():
-    global img, rows, cols
+    global img, original_img, rows, cols
     file_path = filedialog.askopenfilename()
     img = cv2.imread(file_path)
+    original_img = img.copy()  # Save a copy of the original image
     rows, cols = img.shape[:2]
     cv2.imshow('Original', img)
 
 def update_effect_strength(value):
     global effect_strength
     effect_strength = float(value)
+
+def sharpen_image():
+    global img
+    kernel_sharpen = np.array([[-1,-1,-1], [-1,9,-1], [-1,-1,-1]])
+    img = cv2.filter2D(img, -1, kernel_sharpen)
+    cv2.imshow('Original', img)
+
+def change_brightness_contrast():
+    global img
+    brightness = 50
+    contrast = 30
+    img = cv2.convertScaleAbs(img, alpha=(1 + contrast / 100.0), beta=brightness)
+    cv2.imshow('Original', img)
+
+def reset_image():
+    global img, original_img
+    img = original_img.copy()  # Restore the original image
+    cv2.imshow('Original', img)
 
 # Create the main window
 root = tk.Tk()
@@ -49,6 +69,18 @@ slider_label.pack()
 effect_slider = tk.Scale(root, from_=0.0, to=1.0, resolution=0.01, orient='horizontal', command=update_effect_strength)
 effect_slider.set(0.0)
 effect_slider.pack()
+
+# Add a button for the sharpen function
+sharpen_button = tk.Button(root, text="Làm sắc nét", command=sharpen_image)
+sharpen_button.pack()
+
+# Add a button for the brightness/contrast function
+brightness_contrast_button = tk.Button(root, text="Thay đổi độ sáng và độ tương phản", command=change_brightness_contrast)
+brightness_contrast_button.pack()
+
+# Add a button for the reset function
+reset_button = tk.Button(root, text="Khôi phục ảnh gốc", command=reset_image)
+reset_button.pack()
 
 # Set up the OpenCV mouse callback to apply the effect on mouse click
 cv2.namedWindow('Original')
