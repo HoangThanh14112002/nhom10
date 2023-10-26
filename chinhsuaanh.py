@@ -25,7 +25,7 @@ def apply_effect(x, y):
 
     cv2.imshow('Original', img)
 
-def open_image():
+def chon_anh():
     global img, original_img, rows, cols
     file_path = filedialog.askopenfilename()
     img = cv2.imread(file_path)
@@ -33,31 +33,31 @@ def open_image():
     rows, cols = img.shape[:2]
     cv2.imshow('Original', img)
 
-def update_effect_strength(value):
+def muc_do_mo(value):
     global effect_strength
     effect_strength = float(value)
 
-def sharpen_image():
+def lam_sac_net():
     global img
     kernel_sharpen = np.array([[-1,-1,-1], [-1,9,-1], [-1,-1,-1]])
     img = cv2.filter2D(img, -1, kernel_sharpen)
     cv2.imshow('Original', img)
 
-def change_brightness_contrast():
+def thay_doi_do_sang_va_do_tuong_phan():
     global img
-    brightness = 50
-    contrast = 30
+    brightness = 70
+    contrast = 35
     img = cv2.convertScaleAbs(img, alpha=(1 + contrast / 100.0), beta=brightness)
     cv2.imshow('Original', img)
 
-def reset_image():
+def Khoi_phuc_anh_goc():
     global img, original_img
     img = original_img.copy()  # Restore the original image
     cv2.imshow('Original', img)
 
 # Create the main window
 root = tk.Tk()
-root.title("Image Editor")
+root.title("Chỉnh sửa ảnh")
 
 # Load button
 load_button = tk.Button(root, text="Chọn ảnh", command=open_image)
