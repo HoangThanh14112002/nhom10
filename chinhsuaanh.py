@@ -12,7 +12,7 @@ kernel_3x3 = np.ones((3, 3), np.float32) / 9.0
 kernel_5x5 = np.ones((5, 5), np.float32) / 25.0
 effect_strength = 0.0  # Initial effect strength
 
-def apply_effect(x, y):
+def hieu_ung_lam_mo(x, y):
     global img, effect_strength
 
     # Define a region around the clicked point
